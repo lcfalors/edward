@@ -105,7 +105,7 @@ y_data = np.array([np.random.binomial(1, i) for i in p])
 # MODEL
 X = tf.placeholder(tf.float32, [N, D])
 w = Normal(loc=tf.zeros(D), scale=tf.ones(D))
-y = Bernoulli(logits=ed.dot(X, w))
+y = Bernoulli(logits=tf.tensordot(X, w, [[1], [0]]))
 
 # INFERENCE
 qw = Normal(loc=tf.Variable(tf.random_normal([D])),

@@ -7,44 +7,6 @@ import tensorflow as tf
 from tensorflow.python.ops import control_flow_ops
 
 
-def dot(x, y):
-  """Compute dot product between a 2-D tensor and a 1-D tensor.
-
-  If x is a `[M x N]` matrix, then y is a `M`-vector.
-
-  If x is a `M`-vector, then y is a `[M x N]` matrix.
-
-  Args:
-    x: tf.Tensor.
-      A 1-D or 2-D tensor (see above).
-    y: tf.Tensor.
-      A 1-D or 2-D tensor (see above).
-
-  Returns:
-    tf.Tensor.
-    A 1-D tensor of length `N`.
-
-  Raises:
-    InvalidArgumentError.
-    If the inputs have Inf or NaN values.
-  """
-  x = tf.convert_to_tensor(x)
-  y = tf.convert_to_tensor(y)
-  dependencies = [tf.verify_tensor_all_finite(x, msg=''),
-                  tf.verify_tensor_all_finite(y, msg='')]
-  x = control_flow_ops.with_dependencies(dependencies, x)
-  y = control_flow_ops.with_dependencies(dependencies, y)
-
-  if len(x.shape) == 1:
-    vec = x
-    mat = y
-    return tf.reshape(tf.matmul(tf.expand_dims(vec, 0), mat), [-1])
-  else:
-    mat = x
-    vec = y
-    return tf.reshape(tf.matmul(mat, tf.expand_dims(vec, 1)), [-1])
-
-
 def rbf(X, X2=None, lengthscale=1.0, variance=1.0):
   """Radial basis function kernel, also known as the squared
   exponential or exponentiated quadratic. It is defined as

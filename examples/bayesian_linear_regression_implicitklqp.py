@@ -86,7 +86,7 @@ data = generator([X_train, y_train], M)
 X = tf.placeholder(tf.float32, [M, D])
 y_ph = tf.placeholder(tf.float32, [M])
 w = Normal(loc=tf.zeros(D), scale=tf.ones(D))
-y = Normal(loc=ed.dot(X, w), scale=tf.ones(M))
+y = Normal(loc=tf.tensordot(X, w, [[1], [0]]), scale=tf.ones(M))
 
 # INFERENCE
 qw = Normal(loc=tf.Variable(tf.random_normal([D]) + 1.0),

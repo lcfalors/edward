@@ -38,7 +38,7 @@ X_train, y_train = build_toy_dataset(N)
 X = tf.placeholder(tf.float32, [N, D])
 w = Normal(loc=tf.zeros(D), scale=3.0 * tf.ones(D))
 b = Normal(loc=tf.zeros([]), scale=3.0 * tf.ones([]))
-y = Bernoulli(logits=ed.dot(X, w) + b)
+y = Bernoulli(logits=tf.tensordot(X, w, [[1], [0]]) + b)
 
 # INFERENCE
 T = 5000  # number of samples
@@ -71,7 +71,12 @@ plt.show(block=False)
 # Build samples from inferred posterior.
 n_samples = 50
 inputs = np.linspace(-5, 3, num=400, dtype=np.float32).reshape((400, 1))
+<<<<<<< HEAD
 probs = tf.stack([tf.sigmoid(ed.dot(inputs, qw.sample()) + qb.sample())
+=======
+# TODO n_samples; will need to store and use last X posterior samples
+probs = tf.stack([tf.sigmoid(tf.tensordot(inputs, qw, [[1], [0]]) + qb)
+>>>>>>> 25f58be2... replace ed.dot with tensor.dot(..., [[1], [0]])
                   for _ in range(n_samples)])
 
 for t in range(inference.n_iter):
